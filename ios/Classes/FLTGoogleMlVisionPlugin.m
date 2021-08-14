@@ -39,15 +39,9 @@ static NSMutableDictionary<NSNumber *, id<Detector>> *detectors;
 }
 
 - (void)handleMethodCall:(FlutterMethodCall *)call result:(FlutterResult)result {
-  if ([@"BarcodeDetector#detectInImage" isEqualToString:call.method] ||
-      [@"FaceDetector#processImage" isEqualToString:call.method] ||
-      [@"ImageLabeler#processImage" isEqualToString:call.method] ||
-      [@"TextRecognizer#processImage" isEqualToString:call.method]) {
+  if ([@"BarcodeDetector#detectInImage" isEqualToString:call.method]) {
     [self handleDetection:call result:result];
-  } else if ([@"BarcodeDetector#close" isEqualToString:call.method] ||
-             [@"FaceDetector#close" isEqualToString:call.method] ||
-             [@"ImageLabeler#close" isEqualToString:call.method] ||
-             [@"TextRecognizer#close" isEqualToString:call.method]) {
+  } else if ([@"BarcodeDetector#close" isEqualToString:call.method]) {
     NSNumber *handle = call.arguments[@"handle"];
     [detectors removeObjectForKey:handle];
     result(nil);
@@ -65,12 +59,6 @@ static NSMutableDictionary<NSNumber *, id<Detector>> *detectors;
   if (!detector) {
     if ([call.method hasPrefix:@"BarcodeDetector"]) {
       detector = [[BarcodeDetector alloc] initWithOptions:options];
-    } else if ([call.method hasPrefix:@"FaceDetector"]) {
-      detector = [[FaceDetector alloc] initWithOptions:options];
-    } else if ([call.method hasPrefix:@"ImageLabeler"]) {
-      detector = [[ImageLabeler alloc] initWithOptions:options];
-    } else if ([call.method hasPrefix:@"TextRecognizer"]) {
-      detector = [[TextRecognizer alloc] initWithOptions:options];
     }
 
     [FLTGoogleMlVisionPlugin addDetector:handle detector:detector];

@@ -16,9 +16,6 @@ import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
 part 'barcode_detector.dart';
-part 'face_detector.dart';
-part 'image_labeler.dart';
-part 'text_recognizer.dart';
 
 void main() {
   final Completer<String> completer = Completer<String>();
@@ -27,9 +24,6 @@ void main() {
 
   group('$GoogleVision', () {
     barcodeDetectorTests();
-    faceDetectorTests();
-    imageLabelerTests();
-    textRecognizerTests();
   });
 }
 

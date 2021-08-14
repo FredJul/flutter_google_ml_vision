@@ -64,15 +64,6 @@ class MlVisionHandler implements MethodCallHandler {
         case "BarcodeDetector":
           detector = new GMLKBarcodeDetector(options);
           break;
-        case "FaceDetector":
-          detector = new GMLKFaceDetector(options);
-          break;
-        case "ImageLabeler":
-          detector = new GMLKImageLabeler(options);
-          break;
-        case "TextRecognizer":
-          detector = new GMLKTextRecognizer(options);
-          break;
       }
 
       final Integer handle = call.argument("handle");

@@ -54,29 +54,6 @@ class GoogleVision {
       nextHandle++,
     );
   }
-
-  /// Creates an instance of [FaceDetector].
-  FaceDetector faceDetector([FaceDetectorOptions? options]) {
-    return FaceDetector._(
-      options ?? const FaceDetectorOptions(),
-      nextHandle++,
-    );
-  }
-
-  /// Creates an on device instance of [ImageLabeler].
-  ImageLabeler imageLabeler([ImageLabelerOptions? options]) {
-    return ImageLabeler._(
-      options: options ?? const ImageLabelerOptions(),
-      handle: nextHandle++,
-    );
-  }
-
-  /// Creates an instance of [TextRecognizer].
-  TextRecognizer textRecognizer() {
-    return TextRecognizer._(
-      handle: nextHandle++,
-    );
-  }
 }
 
 /// Represents an image object used for both on-device and cloud API detectors.

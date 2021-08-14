@@ -28,10 +28,6 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
 
   final BarcodeDetector _barcodeDetector =
       GoogleVision.instance.barcodeDetector();
-  final FaceDetector _faceDetector = GoogleVision.instance
-      .faceDetector(FaceDetectorOptions(enableContours: true));
-  final ImageLabeler _imageLabeler = GoogleVision.instance.imageLabeler();
-  final TextRecognizer _recognizer = GoogleVision.instance.textRecognizer();
 
   @override
   void initState() {
@@ -78,14 +74,8 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
 
   Future<dynamic> Function(GoogleVisionImage image) _getDetectionMethod() {
     switch (_currentDetector) {
-      case Detector.text:
-        return _recognizer.processImage;
       case Detector.barcode:
         return _barcodeDetector.detectInImage;
-      case Detector.label:
-        return _imageLabeler.processImage;
-      case Detector.face:
-        return _faceDetector.processImage;
     }
 
     return null;
@@ -113,22 +103,6 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
         print(_scanResults);
         painter = BarcodeDetectorPainter(imageSize, _scanResults);
         break;
-      case Detector.face:
-        if (_scanResults is! List<Face>) return noResultsText;
-        painter = FaceDetectorPainter(imageSize, _scanResults);
-        break;
-      case Detector.label:
-        if (_scanResults is! List<ImageLabel>) return noResultsText;
-        painter = LabelDetectorPainter(imageSize, _scanResults);
-        break;
-      case Detector.cloudLabel:
-        if (_scanResults is! List<ImageLabel>) return noResultsText;
-        painter = LabelDetectorPainter(imageSize, _scanResults);
-        break;
-      default:
-        assert(_currentDetector == Detector.text);
-        if (_scanResults is! VisionText) return noResultsText;
-        painter = TextDetectorPainter(imageSize, _scanResults);
     }
 
     return CustomPaint(
@@ -221,9 +195,6 @@ class _CameraPreviewScannerState extends State<CameraPreviewScanner> {
   void dispose() {
     _camera.dispose().then((_) {
       _barcodeDetector.close();
-      _faceDetector.close();
-      _imageLabeler.close();
-      _recognizer.close();
     });
 
     _currentDetector = null;

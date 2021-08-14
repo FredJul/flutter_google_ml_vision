@@ -28,9 +28,6 @@ class _PictureScannerState extends State<PictureScanner> {
   Detector _currentDetector = Detector.text;
   final BarcodeDetector _barcodeDetector =
       GoogleVision.instance.barcodeDetector();
-  final FaceDetector _faceDetector = GoogleVision.instance.faceDetector();
-  final ImageLabeler _imageLabeler = GoogleVision.instance.imageLabeler();
-  final TextRecognizer _recognizer = GoogleVision.instance.textRecognizer();
 
   Future<void> _getAndScanImage() async {
     setState(() {
@@ -85,24 +82,6 @@ class _PictureScannerState extends State<PictureScanner> {
       case Detector.barcode:
         results = await _barcodeDetector.detectInImage(visionImage);
         break;
-      case Detector.face:
-        results = await _faceDetector.processImage(visionImage);
-        break;
-      case Detector.label:
-        results = await _imageLabeler.processImage(visionImage);
-        break;
-      case Detector.text:
-        results = await _recognizer.processImage(visionImage);
-        print(results.blocks);
-        for (final TextBlock block in results.blocks) {
-          for (final TextLine line in block.lines) {
-            for (final TextElement element in line.elements) {
-              print(element.text);
-            }
-          }
-        }
-
-        break;
       default:
         return;
     }
@@ -118,15 +97,6 @@ class _PictureScannerState extends State<PictureScanner> {
     switch (_currentDetector) {
       case Detector.barcode:
         painter = BarcodeDetectorPainter(_imageSize, results);
-        break;
-      case Detector.face:
-        painter = FaceDetectorPainter(_imageSize, results);
-        break;
-      case Detector.label:
-        painter = LabelDetectorPainter(_imageSize, results);
-        break;
-      case Detector.text:
-        painter = TextDetectorPainter(_imageSize, results);
         break;
       default:
         break;
@@ -206,9 +176,6 @@ class _PictureScannerState extends State<PictureScanner> {
   @override
   void dispose() {
     _barcodeDetector.close();
-    _faceDetector.close();
-    _imageLabeler.close();
-    _recognizer.close();
     super.dispose();
   }
 }
